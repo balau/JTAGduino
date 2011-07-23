@@ -1,0 +1,124 @@
+
+communication protocol
+	command-based
+	without reliability
+
+digital pins:
+	tdi
+	tck
+	tdo
+	tms
+	trst
+	reset
+	vref
+	
+commands:
+	set pin (pin)
+	clear pin (pin)
+	get pin (pin) --> bit value
+	pulse high (pin, time)
+	pulse low (pin, time)
+	jtag sequence (number of bits, tdi[], tms[]) --> tdo[]
+	scan chain (params?) --> ids[]
+	jtag clock (tdi, tms) --> tdo
+	get interface version --> minor, major
+	get fw version --> minor, major
+	set speed (khz)
+	assign pin(pin, digitalpin)
+
+what's the "API" in openocd for jtag dongles?	
+openocd contains many "drivers" in src/jtag/drivers
+
+commands are (src/jtag/commands.h):
+
+enum jtag_command_type {
+	JTAG_SCAN         = 1,
+	JTAG_STATEMOVE    = 2,
+	JTAG_RUNTEST      = 3,
+	JTAG_RESET        = 4,
+	JTAG_PATHMOVE     = 6,
+	JTAG_SLEEP        = 7,
+	JTAG_STABLECLOCKS = 8
+};
+
+every driver has its own interface, like:
+
+struct jtag_interface ft2232_interface = {
+	.name = "ft2232",
+	.commands = ft2232_command_handlers,
+
+	.init = ft2232_init,
+	.quit = ft2232_quit,
+	.speed = ft2232_speed,
+	.speed_div = ft2232_speed_div,
+	.khz = ft2232_khz,
+	.execute_queue = ft2232_execute_queue,
+};
+
+execute_queue is the function that reads from a global variable the command to run.
+to execute commands there are "helper" functions (in src/jtag/jtag.h), like:
+
+tms_bits  = tap_get_tms_path(tap_get_state(), tap_get_end_state());
+			tms_count = tap_get_tms_path_len(tap_get_state(), tap_get_end_state());
+
+to set options there are:
+
+static const struct command_registration ft2232_command_handlers[] = {
+	{
+		.name = "ft2232_device_desc",
+		.handler = &ft2232_handle_device_desc_command,
+		.mode = COMMAND_CONFIG,
+		.help = "set the USB device description of the FTDI FT2232 device",
+		.usage = "description_string",
+	},
+...
+	COMMAND_REGISTRATION_DONE
+};
+
+and inside there are functions that behave like "int main(int argc, char *argv[])" :
+
+COMMAND_HANDLER(ft2232_handle_layout_command)
+{
+	if (CMD_ARGC == 0)
+		return ERROR_OK;
+
+	ft2232_layout = malloc(strlen(CMD_ARGV[0]) + 1);
+	strcpy(ft2232_layout, CMD_ARGV[0]);
+
+	return ERROR_OK;
+}
+
+log functions are:
+DEBUG_JTAG_IO
+LOG_DEBUG
+that are like printf.
+
+in src/jtag/interface.c there's state_follower that indicates the current JTAG state.
+then you use function tap_set_state to set the new state where you think you are.
+
+project should have these deliveries:
+- arduino code (wiring o C)
+- jtagduino shield schematics + layout --> PCB
+- openocd patches to add a jtagduino driver
+- API to develop from PC
+- text terminal to send commands
+- documentation of communication protocol
+- documentation for openocd
+
+jtag shield
+	10-pins connector
+	20-pins connector
+	level shifters? (with jumpers/switches)
+	form factor to make a castle of shields even with cables attached?
+
+first iteration could be only working with 5V targets, without level shifters and vrefs, and the power could come from USB cable with a jumper.	
+
+additional functionalities:
+	power supply
+	power supply on/off da sw
+	vref to check if it's alive
+	vref to set input/output levels for Arduino
+	rtck for adaptive speed
+	
+
+

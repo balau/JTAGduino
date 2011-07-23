@@ -1,0 +1,32 @@
+1149.7-2009
+IEEE Standard for Reduced-Pin and Enhanced-Functionality Test Access Port and Boundary-Scan Architecture
+http://ieeexplore.ieee.org/xpl/freeabs_all.jsp?arnumber=5412866
+
+1149.1-2001
+IEEE Standard Test Access Port and Boundary Scan Architecture
+http://standards.ieee.org/findstds/standard/1149.1-2001.html
+
+JTAG tutorial (Corelis)
+http://www.corelis.com/education/JTAG_Tutorial.htm
+
+OpenOCD user guide
+http://openocd.berlios.de/doc/pdf/openocd.pdf
+
+OpenOCD git repo
+http://openocd.git.sourceforge.net/git/gitweb.cgi?p=openocd/openocd;a=summary
+
+Arduino SW reference
+http://arduino.cc/en/Reference/HomePage
+
+Arduino UNO schematics
+http://arduino.cc/en/uploads/Main/arduino-uno-schematic.pdf
+
+ATmega328 datasheet
+http://www.atmel.com/dyn/resources/prod_documents/doc8161.pdf
+
+Serial Vector Format Specification", Revision E, 8 March 1999
+http://www.asset-intertech.com/support/svf.pdf
+
+EBSp - Experimental Boundary Scan project homepage
+http://ebsp.sourceforge.net/
+
