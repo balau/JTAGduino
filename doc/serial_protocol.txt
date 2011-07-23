@@ -1,0 +1,55 @@
+This file contains the specifications of the protocol used to communicate with
+JTAGduino through the serial port.
+
+The communication protocol distinguishes between the "device", which is an
+Arduino implementing the JTAGduino interface, and the "host", which is for
+example the PC that controls the JTAGduino through the USB port. The
+communication is always initiated by the host. The host sends a command to the
+device using subsequent bytes; the first byte is always a code identifying the
+command. The device receives the command, executes the actions specified by the
+command and prepares a sequence of bytes containing the response and sends it
+back to the host. The first byte of the response is always a code indicating the
+result of the operation.  The protocol does not try to implement reliability, it
+is expected that the serial channel between the host and the device is ideal and
+lossless.
+
+Each command is specified in the following format:
+
+<Command name>
+    Description:
+        <Command description>.
+    Command structure:
+        Byte 0: <command byte code> 
+        Byte <x>: <field name>. <description>.
+        Bytes <y-z>: <field name>. <description>.
+        ...
+        Length: <command length in bytes including command code byte>
+    Response structure:
+        Byte <0>: response code.
+            <RESPONSE_CODE> (<response byte code>): <description>
+        Byte <x>: <field name>. <description>.
+        Bytes <y-z>: <field name>. <description>.
+        ...
+        Length: <response length in bytes including response code byte>
+
+Interface Version
+    Description:
+        Retrieves the version of the interface protocol between the host and the
+        device. If the host and the device implement the interface with the same major
+        and minor numbers, they are completely compatible. A host and a device
+        implementing two protocols with the same major numbers but different minor
+        number can communicate with each other using only functionality present in the
+        version with the lower minor number. A host and a device implementing two
+        protocols with different major numbers are not compatible with each other.
+    Command structure:
+        Byte 0: 0x01
+        Length: 1 Byte 
+    Response structure:
+        Byte <0>: response code.
+            <RSP_OK> (0x00): command received correctly.
+        Bytes 1-2: Minor number. A 16-bit value indicating the minor version number.
+        Bytes 3-4: Major number. A 16-bit value indicating the major version number.
+        Length: 5 Bytes
+
+
+   
