@@ -1,0 +1,13 @@
+This is the README file for the JTAGduino project.
+The JTAGduino project has the goal of using Arduino as a JTAG interface.
+
+  Copyright (C) 2011 Francesco Balducci
+
+  Copying and distribution of this file, with or without modification,
+  are permitted in any medium without royalty provided the copyright
+  notice and this notice are preserved.
+
+Primary repository: https://github.com/balau/JTAGduino
+
+JTAGduino is an open source project. See the file COPYING for copying conditions. (TODO: add COPYING with (L?)GPL license for software and TAPR (?) for hardware)
+
