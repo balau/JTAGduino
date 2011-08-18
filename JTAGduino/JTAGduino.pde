@@ -204,6 +204,7 @@ enum jtagduino_rsp {
   RSP_ERROR_BAD_PIN = 3,
   RSP_ERROR_BAD_SPEED = 4,
   RSP_BAD_SEQUENCE_LEN = 5,
+  RSP_BAD_BAUD = 6,
 };
 
 enum jtagduino_constants {
@@ -213,6 +214,7 @@ enum jtagduino_constants {
   IF_VER_MINOR = 1,
   FW_VER_MAJOR = 0,
   FW_VER_MINOR = 1,
+  N_BAUD_RATES = 11,
 };
 
 enum jtagduino_parse_states {
@@ -220,6 +222,9 @@ enum jtagduino_parse_states {
   PARSE_STATE_CMD = 1,
 };
 
+const long baud_rates[N_BAUD_RATES] = {
+  300, 1200, 2400, 4800, 9600, 14400, 19200, 28800, 38400, 57600, 115200
+  };
 byte cmd[MAX_CMD_LEN];
 byte rsp[MAX_RSP_LEN];
 long new_baud;

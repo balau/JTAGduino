@@ -30,6 +30,7 @@ class jtagduino_rsp:
     RSP_ERROR_BAD_PIN = 3
     RSP_ERROR_BAD_SPEED = 4
     RSP_BAD_SEQUENCE_LEN = 5
+    RSP_BAD_BAUD = 6
 
 class jtag_pins:
     TCK = 0

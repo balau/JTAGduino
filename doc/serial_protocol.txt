@@ -25,7 +25,7 @@ Each command is specified in the following format:
         ...
         Length: <command length in bytes including command code byte>
     Response structure:
-        Byte <0>: response code.
+        Byte 0: response code.
             <RESPONSE_CODE> (<response byte code>): <description>
         Byte <x>: <field name>. <description>.
         Bytes <y-z>: <field name>. <description>.
@@ -45,11 +45,41 @@ Interface Version
         Byte 0: 0x01
         Length: 1 Byte 
     Response structure:
-        Byte <0>: response code.
-            <RSP_OK> (0x00): command received correctly.
+        Byte 0: response code.
+            RSP_OK (0x00): command received correctly.
         Bytes 1-2: Minor number. A 16-bit value indicating the minor version number.
         Bytes 3-4: Major number. A 16-bit value indicating the major version number.
         Length: 5 Bytes
 
+Firmware Version
+    Description:
+        Retrieves the version of the firmware that is running on the device. 
+    Command structure:
+        Byte 0: 0x02
+        Length: 1 Byte 
+    Response structure:
+        Byte 0: response code.
+            RSP_OK (0x00): command received correctly.
+        Bytes 1-2: Minor number. A 16-bit value indicating the minor version number.
+        Bytes 3-4: Major number. A 16-bit value indicating the major version number.
+        Length: 5 Bytes
 
-   
+Set Serial Speed
+    Description:
+        Changes the speed data rate in bits per seconds) of the serial
+        communication, by setting the data rate in bits per seconds (baud). The default
+        baud at reset is 9600. The baud rate can be one of 300, 1200, 2400, 4800, 9600,
+        14400, 19200, 28800, 38400, 57600, or 115200. The response is still sent in the
+        old baud rate.
+    Command structure:
+        Byte 0: 0x03
+        Byte 1-4: new baud rate. The baud is expressed as a 32-bit integer
+            where the least significant byte is placed in byte 1 and the most significant
+            byte is placed in byte 4 (little endian format).  Length: 5 Bytes.
+    Response structure:
+        Byte 0: response code.
+            RSP_OK (0x00): command received correctly. The next serial communication will be done in the new baud rate.
+            RSP_BAD_BAUD (0x06): the new baud rate is not recognized as a valid value.
+        Length: 1 Byte 
+
+
