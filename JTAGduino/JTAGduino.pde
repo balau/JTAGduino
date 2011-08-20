@@ -180,7 +180,7 @@ int jtag_clock(int tms, int tdi) {
 
 int jtag_sequence(unsigned int n, const byte *tms, const byte *tdi, byte *tdo) {
   unsigned int i_seq;
-  if(i_seq > JTAG_MAX_SEQUENCE_LEN) {
+  if(n > JTAG_MAX_SEQUENCE_LEN) {
     return JTAG_ERROR_BAD_SEQUENCE_LEN;
   }
   for(i_seq = 0; i_seq < n; i_seq++) {
