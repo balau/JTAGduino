@@ -62,8 +62,8 @@ enum jtag_constants {
   JTAG_MAX_SEQUENCE_LEN_BYTES = JTAG_MAX_SEQUENCE_LEN/8, //32
 };
 
-int jtag_pin_map[N_JTAG_PINS] = { 0, 1, 2, 3, 4 };
-int jtag_pin_dir[N_JTAG_PINS] = { OUTPUT, OUTPUT, OUTPUT, INPUT, OUTPUT };
+int jtag_pin_map[N_JTAG_PINS] = { 2, 3, 4, 5, 6 };
+const int jtag_pin_dir[N_JTAG_PINS] = { OUTPUT, OUTPUT, OUTPUT, INPUT, OUTPUT };
 unsigned long jtag_last_tck_micros;
 unsigned long jtag_min_tck_micros = 0;
 
