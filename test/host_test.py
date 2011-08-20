@@ -30,12 +30,22 @@ if (len(sys.argv) > 1):
     jtagduino_port = sys.argv[1]
 
 device = jtagduino(jtagduino_port)
-print 'if_ver_major = %d if_ver_minor = %d' % device.if_ver()
-print 'fw_ver_major = %d fw_ver_minor = %d' % device.fw_ver()
+
+print 'if_ver_major = %d; if_ver_minor = %d' % device.if_ver()
+print 'fw_ver_major = %d; fw_ver_minor = %d' % device.fw_ver()
+print 'set_serial_speed(115200) = %d' % device.set_serial_speed(115200)
 print 'clear pin TDI rsp = %d' % device.clear_pin(jtag_pins.TDI)
 print 'set pin TDI rsp = %d' % device.set_pin(jtag_pins.TDI)
-print 'get pin TDO rsp = %d val = %d' % device.get_pin(jtag_pins.TDO)
-
+print 'get pin TDO rsp = %d; val = %d' % device.get_pin(jtag_pins.TDO)
+print 'jtag_clock(1,1): rsp = %d; tdo = %d' % device.jtag_clock(1,1)
+print 'jtag_clock(1,0): rsp = %d; tdo = %d' % device.jtag_clock(1,0)
+(rsp, tdo_seq) = device.jtag_sequence([1,1,1,1], [1, 1, 0, 1])
+print ('jtag_sequence([1,1,1,1], [1, 1, 0, 1]), rsp = %d;' % rsp) + ' tdo_seq = ' + str(tdo_seq)
+(rsp, tdo_seq) = device.jtag_sequence([1] * 255, [1] * 255)
+print ('jtag_sequence([1] * 255, [1] * 255), rsp = %d;' % rsp) + ' tdo_seq = ' + str(tdo_seq)
+print 'device.set_jtag_speed(1) = %d' % device.set_jtag_speed(1)
+(rsp, tdo_seq) = device.jtag_sequence([1] * 255, [1] * 255)
+print ('jtag_sequence([1] * 255, [1] * 255), rsp = %d;' % rsp) + ' tdo_seq = ' + str(tdo_seq)
 sys.exit(0);
 
 #TODO: other commands
