@@ -65,7 +65,7 @@ enum jtag_constants {
 int jtag_pin_map[N_JTAG_PINS] = { 2, 3, 4, 5, 6 };
 const int jtag_pin_dir[N_JTAG_PINS] = { OUTPUT, OUTPUT, OUTPUT, INPUT, OUTPUT };
 unsigned long jtag_last_tck_micros;
-unsigned long jtag_min_tck_micros = 0;
+unsigned long jtag_min_tck_micros;
 
 void jtag_setup() {
   int i_pin;
