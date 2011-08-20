@@ -73,6 +73,7 @@ void jtag_setup() {
     pinMode(jtag_pin_map[i_pin], jtag_pin_dir[i_pin]);
   }
   jtag_last_tck_micros = micros();
+  jtag_min_tck_micros = 1;
 }
 
 int jtag_write_pin(int pin, int value) {
@@ -301,14 +302,27 @@ int jtagduino_parse(byte c) {
       switch(cmd[0]) {
         case CMD_SET_SERIAL_SPEED:
           if(n_rx_bytes == 5) {
-            new_baud = cmd[1] + 
-              (cmd[2] << 8) +
-              (cmd[3] << 16) +
-              (cmd[4] << 24);
+            long baud = 0;
+            int i_baud;
+            baud += cmd[4];
+            baud <<= 8;
+            baud += cmd[3];
+            baud <<= 8;
+            baud += cmd[2];
+            baud <<= 8;
+            baud += cmd[1];
+            rsp[0] = RSP_BAD_BAUD;
+            rsp_len = 1;
+            for(i_baud = 0; i_baud < N_BAUD_RATES; i_baud++) {
+              if(baud_rates[i_baud] == baud) {
+                new_baud = baud;
+                rsp[0] = RSP_OK;
+                break;      
+              }              
+            }
             parse_state = PARSE_STATE_IDLE;
             n_rx_bytes = 0;
-            rsp[0] = RSP_OK;
-            rsp_len = 1;
+
           }
           break;
         case CMD_SET_PIN:
@@ -482,6 +496,8 @@ void loop() {
       Serial.write(rsp, rsp_len);
     }
     if(new_baud != 0) {
+      /* Wait TX complete vefore changing BAUD rate */
+      delay(27); /* worst case is 300 baud, so ~27ms to transmit a byte. */
       Serial.begin(new_baud);
       new_baud = 0;
     }
