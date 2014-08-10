@@ -69,7 +69,7 @@ def read_idcodes(device):
 if __name__ == '__main__':
     jtagduino_port = '/dev/ttyACM0'
     jtagduino_serial_baud = 115200
-    jtagduino_jtag_khz = 1000
+    jtagduino_jtag_khz = 500
 
     if (len(sys.argv) > 1):
         jtagduino_port = sys.argv[1]

@@ -57,7 +57,7 @@ enum jtag_errors {
 };
 
 enum jtag_constants {
-  JTAG_MAX_SPEED_KHZ = 1000,
+  JTAG_MAX_SPEED_KHZ = 500,
   JTAG_MAX_SEQUENCE_LEN = 256,
   JTAG_MAX_SEQUENCE_LEN_BYTES = JTAG_MAX_SEQUENCE_LEN/8, //32
 };
@@ -158,7 +158,10 @@ int jtag_set_speed(unsigned int khz) {
   if(khz == 0 || khz > JTAG_MAX_SPEED_KHZ) {
     return JTAG_ERROR_BAD_SPEED;
   }
-  jtag_min_tck_micros = (1000U + (khz>>1))/khz; //ceil
+  // Mininum time for TCK to be stable is half the clock period.
+  // For 100kHz of TCK frequency the period is 10us so jtag_min_tck_micros is 5us.
+  jtag_min_tck_micros = (500U + khz - 1)/khz; //ceil
+  
   return JTAG_NO_ERROR;
 }
 

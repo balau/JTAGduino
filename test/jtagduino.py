@@ -51,6 +51,7 @@ class jtag_pins:
     N_JTAG_PINS = 5
 
 class jtagduino:
+    MAX_JTAG_SPEED_KHZ = 500
     def __init__(self, port='/dev/ttyACM0'):
         self.ser = serial.Serial(
             port = port,
