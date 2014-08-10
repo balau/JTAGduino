@@ -52,11 +52,12 @@ class jtag_pins:
 
 class jtagduino:
     MAX_JTAG_SPEED_KHZ = 500
-    def __init__(self, port='/dev/ttyACM0'):
+    BAUD_RATES = [300, 1200, 2400, 4800, 9600, 14400, 19200, 28800, 38400, 57600, 115200]
+    DEFAULT_BAUD_RATE = 9600
+    def __init__(self, port='/dev/ttyACM0', baudrate=DEFAULT_BAUD_RATE):
         self.ser = serial.Serial(
             port = port,
-            #baudrate = 115200,
-            baudrate = 9600,
+            baudrate = baudrate,
         )
         time.sleep(1.5)
         self.ser.flushInput()

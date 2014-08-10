@@ -249,6 +249,7 @@ enum jtagduino_parse_states {
 const long baud_rates[N_BAUD_RATES] = {
   300, 1200, 2400, 4800, 9600, 14400, 19200, 28800, 38400, 57600, 115200
   };
+const long DEFAULT_BAUD_RATE = 9600;
 byte cmd[MAX_CMD_LEN];
 byte rsp[MAX_RSP_LEN];
 long new_baud;
@@ -491,7 +492,7 @@ int jtagduino_parse(byte c) {
 void setup() {
   jtag_setup();
   jtagduino_setup();
-  Serial.begin(9600);
+  Serial.begin(DEFAULT_BAUD_RATE);
 }
 
 void loop() {
