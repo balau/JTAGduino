@@ -78,7 +78,8 @@ Set Serial Speed
             byte is placed in byte 4 (little endian format).  Length: 5 Bytes.
     Response structure:
         Byte 0: response code.
-            RSP_OK (0x00): command received correctly. The next serial communication will be done in the new baud rate.
+            RSP_OK (0x00): command received correctly. The next serial communication will
+                be done in the new baud rate.
             RSP_BAD_BAUD (0x06): the new baud rate is not recognized as a valid value.
         Length: 1 Byte 
 

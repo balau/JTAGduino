@@ -121,4 +121,5 @@ additional functionalities:
 	rtck for adaptive speed
 	
 
+openocd remote_bitbang?
 
