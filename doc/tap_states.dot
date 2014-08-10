@@ -1,31 +1,33 @@
 digraph tap_states {
     node [shape=box];
-    rankdir="TB";
+    rankdir=TB;
+    ranksep=0.1;
 	
-    reset -> idle [label="0"];
+    reset -> idle [label=0];
 
     // on the same row
     subgraph noreset {
-        rank="same";
+        rank=same;
 
-        idle -> seldr [label="1"];
-        seldr -> selir [label="1"];
+        idle -> seldr [label=1];
+        seldr -> selir [label=1];
     }
 
     subgraph drscan {
         // top to bottom
-        seldr -> captdr [label="0"];
-        captdr -> shiftdr [label="0"];
-        shiftdr -> exit1dr [label="1"];
-        exit1dr -> pausedr [label="0"];
-        pausedr -> exit2dr [label="1"];
-        exit2dr -> updatedr [label="1"];
+        seldr -> captdr [label=0];
+        captdr -> shiftdr [label=0];
+        shiftdr -> exit1dr [label=1];
+        exit1dr -> pausedr [label=0];
+        pausedr -> exit2dr [label=1];
+        exit2dr -> updatedr [label=1];
+        // self edges
+        shiftdr:se -> shiftdr:ne [label=0, constraint=false];
+        pausedr:se -> pausedr:ne [label=0, constraint=false];
         // other transitions
-        captdr -> exit1dr [label="1", constraint=false];
-        shiftdr:se -> shiftdr:ne [label="0", constraint=false];
-        exit1dr -> updatedr [label="1", constraint=false];
-        pausedr:se -> pausedr:ne [label="0", constraint=false];
-        exit2dr -> shiftdr [label="0", constraint=false];
+        captdr -> exit1dr [label=1, constraint=false];
+        exit1dr -> updatedr [label=1, constraint=false];
+        exit2dr -> shiftdr [label=0, constraint=false];
         // state names
         seldr [label="Select-DR-Scan"];
         captdr [label="Capture-DR"];
@@ -38,18 +40,19 @@ digraph tap_states {
 
     subgraph irscan {
         // top to bottom
-        selir -> captir [label="0"];
-        captir -> shiftir [label="0"];
-        shiftir -> exit1ir [label="1"];
-        exit1ir -> pauseir [label="0"];
-        pauseir -> exit2ir [label="1"];
-        exit2ir -> updateir [label="1"];
+        selir -> captir [label=0];
+        captir -> shiftir [label=0];
+        shiftir -> exit1ir [label=1];
+        exit1ir -> pauseir [label=0];
+        pauseir -> exit2ir [label=1];
+        exit2ir -> updateir [label=1];
+        // self edges
+        shiftir:se -> shiftir:ne [label=0, constraint=false];
+        pauseir:se -> pauseir:ne [label=0, constraint=false];
         // other transitions
-        captir -> exit1ir [label="1", constraint=false];
-        shiftir:se -> shiftir:ne [label="0", constraint=false];
-        exit1ir -> updateir [label="1", constraint=false];
-        pauseir:se -> pauseir:ne [label="0", constraint=false];
-        exit2ir -> shiftir [label="0", constraint=false];
+        captir -> exit1ir [label=1, constraint=false];
+        exit1ir -> updateir [label=1, constraint=false];
+        exit2ir -> shiftir [label=0, constraint=false];
         // state names
         selir [label="Select-IR-Scan"];
         captir [label="Capture-IR"];
@@ -60,15 +63,15 @@ digraph tap_states {
         updateir [label="Update-IR"];
     }
 
+    // self edges
+    reset:sw -> reset:nw [label=1, constraint=false];
+    idle:sw -> idle:nw [label=0, constraint=false];
     // other transitions
-    reset:sw -> reset:nw [label="1", constraint=false];
-    idle:sw -> idle:nw [label="0", constraint=false];
-    selir -> reset [label="1", constraint=false];
-    updatedr -> seldr [label="1", constraint=false];
-    updateir -> seldr [label="1", constraint=false];
-    updatedr -> idle [label="0", constraint=false];
-    updateir -> idle [label="0", constraint=false];
-
+    selir -> reset [label=1, constraint=false];
+    updatedr -> seldr [label=1, constraint=false];
+    updateir -> seldr [label=1, constraint=false];
+    updatedr -> idle [label=0, constraint=false];
+    updateir -> idle [label=0, constraint=false];
     // state names
     reset [label="Test-Logic-Reset"];
     idle [label="Run-Test/Idle"];
