@@ -166,17 +166,21 @@ int jtag_clock(int tms, int tdi) {
   unsigned long cur_micros;
   int tdo;
   
+  // Setting TDI and TMS before rising edge of TCK.
   jtag_write_pin(TDI, tdi);
   jtag_write_pin(TMS, tms);
+  // Waiting until TCK has been stable for at least jtag_min_tck_micros.
   cur_micros = micros();
   if(cur_micros < jtag_last_tck_micros + jtag_min_tck_micros) {
     delayMicroseconds(jtag_last_tck_micros + jtag_min_tck_micros - cur_micros);
   }
-  jtag_set_pin(TCK);
+  tdo = jtag_get_pin(TDO); // TDO changes on falling edge of TCK, we are reading value changed during last jtag_clock.
+  jtag_set_pin(TCK); // Rising edge of TCK. TDI and TMS are sampled in.
   delayMicroseconds(jtag_min_tck_micros);
-  jtag_clear_pin(TCK);
-  jtag_last_tck_micros = micros();
-  return jtag_get_pin(TDO);
+  jtag_clear_pin(TCK); // Falling edge of TCK. TDO is changing.
+  jtag_last_tck_micros = micros(); // Saving timestamp of last TCK change.
+  
+  return tdo;
 }
 
 int jtag_sequence(unsigned int n, const byte *tms, const byte *tdi, byte *tdo) {
